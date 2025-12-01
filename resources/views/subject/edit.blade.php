@@ -1,26 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Edit Subject</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">{{ __('Subject') }}</div>
 
-    @if ($errors->any())
-        <div style="color:red">
-            <ul>
-                @foreach ($errors->all() as $err)
-                    <li>{{ $err }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+                    <div class="card-body">
+                        <h5>Form</h5>
+                        <form action="{{ route('subject.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="subject" class="form-label">Subject</label>
+                                        <input type="text" name="subject" id="subject"
+                                            class="form-control @error('subject') is-invalid @enderror"
+                                            placeholder="Enter subject name" value="{{ $subject->name }}">
 
-    <form action="{{ route('subject.update', $subject->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div>
-            <label>Nama Subject</label>
-            <input type="text" name="name" value="{{ old('name', $subject->name) }}" required>
+                                        @error('subject')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                        <button type="submit" class="btn btn-primary mt-3 w-25">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="submit">Update</button>
-        <a href="{{ route('subject.index') }}">Kembali</a>
-    </form>
-@endsection
+    @endsection

@@ -9,8 +9,8 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $subject = Subject::orderBy('name', 'asc')->paginate(10);
-        return view('subject.index', compact('subject'));
+        $subjects = Subject::orderBy('name')->paginate(10);
+        return view('subject.index', compact('subjects'));
     }
 
     public function create()
@@ -42,7 +42,7 @@ class SubjectController extends Controller
     public function update(Request $request, Subject $subject)
     {
         $request->validate([
-            'name' => 'required|string|max:50|unique:subjects,name,' . $subject->id
+            'name' => 'required|string|max:50|unique:subjects,name,'
         ]);
 
         $subject->update(['name' => $request->name]);
@@ -53,6 +53,6 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
-        return redirect()->route('subject.index')->with('success', 'Subject berhasil dihapus');
+        return redirect()->route('subject.index')->with('delete', 'Subject berhasil dihapus');
     }
 }

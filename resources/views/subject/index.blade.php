@@ -51,16 +51,18 @@
                             </thead>
 
                             <tbody>
-                                @forelse ($subject as $subject)
+                                @forelse ($subjects as $subject)
                                     <tr>
-                                        <td>{{ $loop->iteration + ($subject->currentPage() - 1) * $subject->perPage() }}
+                                        <td>{{ $loop->iteration + ($subjects->currentPage() - 1) * $subjects->perPage() }}
                                         </td>
-                                        <td class="text-start">{{ $subject->name }}</td>
+                                        <td> {{ $subject->name }}</td>
                                         <td>
-                                            <a href="#" class="text-primary text-decoration-none me-2">Detail</a>
-                                            <a href="#" class="text-warning text-decoration-none me-2">Edit</a>
-                                            <form action="#" method="POST" class="d-inline"
-                                                onsubmit="return confirm('Yakin hapus data ini?')">
+                                            <a href="{{ route('subject.show', $subject->id) }}"
+                                                class="text-primary text-decoration-none me-2">Detail</a>
+                                            <a href="{{ route('subject.edit', $subject->id) }}"
+                                                class="text-warning text-decoration-none me-2">Edit</a>
+                                            <form action="{{ route('subject.destroy', $subject->id) }}" method="POST"
+                                                class="d-inline" onsubmit="return confirm('Yakin hapus data ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
@@ -75,7 +77,7 @@
                                 @endforelse
                             </tbody>
                         </table>
-                        {{ $subject->links() }}
+                        {{ $subjects->links() }}
                     </div>
 
                 </div>
