@@ -9,5 +9,8 @@ class Subject extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $table = 'subjects';
+    protected $primaryKey = 'id';
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 }

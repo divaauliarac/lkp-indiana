@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instructor;
 use App\Models\instructorModel;
 use App\Models\siswa;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class dashboardController extends Controller
@@ -16,8 +17,8 @@ class dashboardController extends Controller
     {
         $siswaCount = siswa::count();
         $instructorCount = Instructor::count();
-        $subjectCount = Instructor::count();
-        return view('dashboard.index', compact('siswaCount', 'instructorCount', 'subjectCount'));
+        $subjectsCount = Subject::count();
+        return view('dashboard.index', compact('siswaCount', 'subjectsCount', 'instructorCount'));
     }
 
     /**

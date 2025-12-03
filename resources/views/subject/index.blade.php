@@ -12,7 +12,6 @@
                             {{-- Tombol Add & Export --}}
                             <div class="col-md-6">
                                 <a href="{{ route('subject.create') }}" class="btn btn-success me-2">Add</a>
-                                <a href="#" class="btn btn-danger">Export PDF</a>
                             </div>
 
                             {{-- Form Pencarian --}}
@@ -51,17 +50,17 @@
                             </thead>
 
                             <tbody>
-                                @forelse ($subjects as $subject)
+                                @forelse ($subjects as $i => $row)
                                     <tr>
                                         <td>{{ $loop->iteration + ($subjects->currentPage() - 1) * $subjects->perPage() }}
                                         </td>
-                                        <td> {{ $subject->name }}</td>
+                                        <td> {{ $row->name }}</td>
                                         <td>
-                                            <a href="{{ route('subject.show', $subject->id) }}"
+                                            <a href="{{ route('subject.show', $row->id) }}"
                                                 class="text-primary text-decoration-none me-2">Detail</a>
-                                            <a href="{{ route('subject.edit', $subject->id) }}"
+                                            <a href="{{ route('subject.edit', $row->id) }}"
                                                 class="text-warning text-decoration-none me-2">Edit</a>
-                                            <form action="{{ route('subject.destroy', $subject->id) }}" method="POST"
+                                            <form action="{{ route('subject.destroy', $row->id) }}" method="POST"
                                                 class="d-inline" onsubmit="return confirm('Yakin hapus data ini?')">
                                                 @csrf
                                                 @method('DELETE')

@@ -2,35 +2,29 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">{{ __('Subject') }}</div>
 
-                    <div class="card-body">
-                        <h5>Form</h5>
-                        <form action="{{ route('subject.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-8">
-                                    {{-- Subject (Create) --}}
-                                    <div class="mb-3">
-                                        <label for="subject" class="form-label">Subject</label>
-                                        <input type="text" name="subject" id="subject"
-                                            class="form-control @error('subject') is-invalid @enderror"
-                                            placeholder="Enter subject name" value="{{ old('subject') }}">
+        <h3 class="mb-4">Tambah Subject</h3>
 
-                                        @error('subject')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+        <div class="row">
+            {{-- LEFT SIDE: FORM --}}
+            <div class="col-md-8">
 
-                                        <button type="submit" class="btn btn-primary mt-3 w-25">Submit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                <div class="card shadow-sm p-4">
+                    <form action="{{ route('subject.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        {{-- NAME --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="{{ route('subject.index') }}" class="btn btn-secondary">Back</a>
+
+                    </form>
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection

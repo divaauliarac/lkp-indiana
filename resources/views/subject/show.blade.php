@@ -1,18 +1,31 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Detail Subject</h1>
+    <div class="container">
 
-    @if (session('success'))
-        <div style="color:green">{{ session('success') }}</div>
-    @endif
+        <h3 class="mb-4">Tambah Subject</h3>
 
-    <div>
-        <strong>Nama Subject:</strong> {{ $subject->name }}
-    </div>
+        <div class="row">
+            {{-- LEFT SIDE: FORM --}}
+            <div class="col-md-8">
 
-    <div style="margin-top: 10px;">
-        <a href="{{ route('subject.index') }}">Kembali ke Daftar Subject</a> |
-        <a href="{{ route('subject.edit', $subject->id) }}">Edit Subject</a>
+                <div class="card shadow-sm p-4">
+                    <form action="{{ route('subject.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        {{-- NAME --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ $subjects->name }}" required
+                                disabled>
+                        </div>
+
+                        <a href="{{ route('subject.edit', $subjects->id) }}" class="btn btn-warning">Edit</a>
+                        <a href="{{ route('subject.index') }}" class="btn btn-secondary">Back</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

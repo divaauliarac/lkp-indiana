@@ -33,11 +33,11 @@ class instructorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:50',
-            'gender' => 'required|in:male,female',
-            'expertise' => 'required|string|max:100',
+            'gender' => 'required',
+            'expertise' => 'required',
             'phone' => 'required|regex:/^[0-9]+$/|digits_between:8,15',
-            'address' => 'required|string|max:200',
-            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'address' => 'required',
+            'photo' => 'required|image'
         ]);
 
         // Upload photo
@@ -45,15 +45,16 @@ class instructorController extends Controller
         $photoName = time() . '_' . str_replace(' ', '-', strtolower($request->name)) . '.' . $photo->getClientOriginalExtension();
         $photo->move(public_path('assets/img/instructor/'), $photoName);
 
-        Instructor::create([
+        $data = [
             'name' => $request->name,
             'gender' => $request->gender,
             'expertise' => $request->expertise,
             'phone' => $request->phone,
             'address' => $request->address,
             'photo' => $photoName
-        ]);
+        ];
 
+        Instructor::create($data);
         return redirect()->route('instructor.index')->with('success', 'Instructor berhasil ditambahkan');
     }
 
@@ -84,34 +85,47 @@ class instructorController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:50',
-            'gender' => 'required|in:male,female',
-            'expertise' => 'required|string|max:100',
+            'gender' => 'required',
+            'expertise' => 'required',
             'phone' => 'required|regex:/^[0-9]+$/|digits_between:8,15',
-            'address' => 'required|string|max:200',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'address' => 'required|string|max:100',
+            'photo' => 'image'
         ]);
 
-        // Upload photo jika ada
-        if ($request->hasFile('photo')) {
-            $oldPhoto = $instructor->photo;
-            if ($oldPhoto && file_exists(public_path('assets/img/instructor/' . $oldPhoto))) {
-                unlink(public_path('assets/img/instructor/' . $oldPhoto));
+        $photo = $request->file('photo');
+        $oldPhoto = $instructor->photo;
+        $folder = public_path('assets/img/instructor/');
+        $newname = time() . '_' . str_replace(' ', '-', strtolower($request->name));
+
+        if ($photo) {
+            if ($oldPhoto && file_exists($folder . $oldPhoto)) {
+                unlink(($folder . $oldPhoto));
             }
-            $photo = $request->file('photo');
-            $photoName = time() . '_' . str_replace(' ', '-', strtolower($request->name)) . '.' . $photo->getClientOriginalExtension();
-            $photo->move(public_path('assets/img/instructor/'), $photoName);
+
+            $photoName = $newname . '.' . $photo->getClientOriginalExtension();
+            $photo->move($folder, $photoName);
         } else {
-            $photoName = $instructor->photo;
+            $ext = pathinfo($oldPhoto, PATHINFO_EXTENSION);
+            $namePhoto = $newname . '.' . $ext;
+            $oldPath = $folder . $oldPhoto;
+            $newPath = $folder . $namePhoto;
+
+            if (
+                $request->name !== $instructor->name && file_exists($oldPath) && is_file($oldPath)
+            ) {
+                rename($oldPath, $newPath);
+            }
         }
 
-        $instructor->update([
-            'name' => $request->name,
-            'gender' => $request->gender,
-            'expertise' => $request->expertise,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'photo' => $photoName
-        ]);
+
+        $instructor->name = $request->name;
+        $instructor->gender = $request->gender;
+        $instructor->expertise = $request->expertise;
+        $instructor->phone = $request->phone;
+        $instructor->address = $request->address;
+        $instructor->photo = $photoName;
+        $instructor->save();
+
 
         return redirect()->route('instructor.index')->with('success', 'Instructor berhasil diupdate');
     }
@@ -122,13 +136,14 @@ class instructorController extends Controller
     public function destroy($id)
     {
         $instructor = Instructor::findOrFail($id);
-        $photo = $instructor->photo;
-        if ($photo && file_exists(public_path('assets/img/instructor/' . $photo))) {
-            unlink(public_path('assets/img/instructor/' . $photo));
+        $path = public_path('assets/img/foto-siswa/' . $instructor->photo);
+
+        if ($instructor->photo && file_exists($path) && is_file($path)) {
+            unlink($path);
         }
 
         $instructor->delete();
-        return redirect()->route('instructor.index')->with('success', 'Instructor berhasil dihapus');
+        return redirect()->route('instructor.index')->with('delete', 'Instructor berhasil dihapus');
     }
 
     public function export()

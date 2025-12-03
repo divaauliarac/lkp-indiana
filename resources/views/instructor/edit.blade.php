@@ -72,10 +72,27 @@
                             <input type="file" name="photo" class="form-control" accept="image/*" id="photoInput">
                         </div>
 
-                        <button type="submit" class="btn btn-warning">Update</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                         <a href="{{ route('instructor.index') }}" class="btn btn-secondary">Back</a>
 
                     </form>
+                    {{-- JS PREVIEW --}}
+                    <script>
+                        document.getElementById("photo").addEventListener("change", function(e) {
+                            const file = e.target.files[0];
+                            const preview = document.getElementById("photoPreview");
+
+                            if (file) {
+                                if (file.type.startsWith("image/")) {
+                                    preview.src = URL.createObjectURL(file);
+                                } else {
+                                    alert("Please upload a valid image file.");
+                                    e.target.value = "";
+                                    preview.src = "/assets/img/instructor/default.png";
+                                }
+                            }
+                        });
+                    </script>
                 </div>
 
             </div>
@@ -97,7 +114,7 @@
 
     </div>
 
-    {{-- LIVE PREVIEW --}}
+    {{-- LIVE PREVIEW
     <script>
         document.getElementById('photoInput').addEventListener('change', function(e) {
             const reader = new FileReader();
@@ -106,5 +123,5 @@
             }
             reader.readAsDataURL(this.files[0]);
         });
-    </script>
+    </script> --}}
 @endsection

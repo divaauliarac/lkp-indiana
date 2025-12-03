@@ -3,86 +3,113 @@
 @section('content')
     <div class="container">
 
-        <h3 class="mb-4">Detail Instructor</h3>
+        <h3 class="mb-4">Detail</h3>
 
         <div class="row">
-
-            {{-- LEFT — INFORMATION --}}
+            {{-- BAGIAN KIRI --}}
             <div class="col-md-8">
 
                 <div class="card shadow-sm p-4">
+                    <form action="{{ route('instructor.update', $instructor->id) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-                    <h4 class="fw-semibold mb-4">{{ $instructor->name }}</h4>
+                        {{-- NAME --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ $instructor->name }}"
+                                required disabled>
+                        </div>
 
-                    <table class="table table-borderless">
+                        {{-- GENDER --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Gender</label><br>
 
-                        <tr>
-                            <th width="150" class="text-secondary">Gender</th>
-                            <td class="fw-semibold">
-                                {{ $instructor->gender == 'male' ? 'Male' : 'Female' }}
-                            </td>
-                        </tr>
+                            <label class="me-3">
+                                <input type="radio" name="gender" value="male"
+                                    {{ $instructor->gender == 'male' ? 'checked' : '' }} disabled>
+                                Male
+                            </label>
 
-                        <tr>
-                            <th class="text-secondary">Expertise</th>
-                            <td class="fw-semibold">
-                                @if ($instructor->expertise == 'pg')
+                            <label>
+                                <input type="radio" name="gender" value="female"
+                                    {{ $instructor->gender == 'female' ? 'checked' : '' }} disabled>
+                                Female
+                            </label>
+                        </div>
+
+                        {{-- EXPERTISE --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Expertise</label>
+                            <select class="form-select" name="expertise" required disabled>
+                                <option value="pg" {{ $instructor->expertise == 'pg' ? 'selected' : '' }}>
                                     Programming
-                                @elseif ($instructor->expertise == 'dg')
+                                </option>
+                                <option value="dg" {{ $instructor->expertise == 'dg' ? 'selected' : '' }}>
                                     Design
-                                @elseif ($instructor->expertise == 'ap')
+                                </option>
+                                <option value="ap" {{ $instructor->expertise == 'ap' ? 'selected' : '' }}>
                                     Office
-                                @elseif ($instructor->expertise == 'jk')
+                                </option>
+                                <option value="jk" {{ $instructor->expertise == 'jk' ? 'selected' : '' }}>
                                     Network
-                                @else
-                                    -
-                                @endif
+                                </option>
+                            </select>
+                        </div>
 
-                            </td>
-                        </tr>
+                        {{-- PHONE --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Phone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ $instructor->phone }}"
+                                disabled>
+                        </div>
 
-                        <tr>
-                            <th class="text-secondary">Phone</th>
-                            <td class="fw-semibold">{{ $instructor->phone ?? '-' }}</td>
-                        </tr>
+                        {{-- ADDRESS --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Address</label>
+                            <textarea name="address" class="form-control" disabled>{{ $instructor->address }}</textarea>
+                        </div>
 
-                        <tr>
-                            <th class="text-secondary">Address</th>
-                            <td class="fw-semibold">{{ $instructor->address ?? '-' }}</td>
-                        </tr>
+                        {{-- PHOTO --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Photo (Upload New)</label>
+                            <input type="file" name="photo" class="form-control" accept="image/*" id="photoInput"
+                                disabled>
+                        </div>
 
-                        <tr>
-                            <th class="text-secondary">Created At</th>
-                            <td>{{ $instructor->created_at->format('d M Y') }}</td>
-                        </tr>
+                        <div class="col-sm-10">
+                            <a href="{{ route('instructor.edit', $instructor->id) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ route('instructor.index') }}" class="btn btn-secondary">Back</a>
+                        </div>
+                    </form>
+                    {{-- JS PREVIEW --}}
+                    <script>
+                        document.getElementById("photo").addEventListener("change", function(e) {
+                            const file = e.target.files[0];
+                            const preview = document.getElementById("photoPreview");
 
-                        <tr>
-                            <th class="text-secondary">Updated At</th>
-                            <td>{{ $instructor->updated_at->format('d M Y') }}</td>
-                        </tr>
-
-                    </table>
-
-                    <div class="mt-3">
-                        <a href="{{ route('instructor.index') }}" class="btn btn-secondary">
-                            Back
-                        </a>
-
-                        <a href="{{ route('instructor.edit', $instructor->id) }}" class="btn btn-primary">
-                            Edit
-                        </a>
-                    </div>
-
+                            if (file) {
+                                if (file.type.startsWith("image/")) {
+                                    preview.src = URL.createObjectURL(file);
+                                } else {
+                                    alert("Please upload a valid image file.");
+                                    e.target.value = "";
+                                    preview.src = "/assets/img/instructor/default.png";
+                                }
+                            }
+                        });
+                    </script>
                 </div>
 
             </div>
 
-            {{-- RIGHT — PHOTO --}}
+            {{-- PHOTO PREVIEW --}}
             <div class="col-md-4">
 
                 <div class="card shadow-sm p-3 text-center">
 
-                    <h5 class="mb-3 fw-semibold">Photo</h5>
+                    <h5 class="mb-3">Current Photo</h5>
 
                     <img src="{{ $instructor->photo ? asset('assets/img/instructor/' . $instructor->photo) : asset('assets/img/instructor/default.png') }}"class="img-fluid rounded border"
                         style="max-height: 400px; object-fit: cover;">
@@ -90,8 +117,18 @@
                 </div>
 
             </div>
-
         </div>
 
     </div>
+
+    {{-- LIVE PREVIEW
+    <script>
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('photoPreview').src = e.target.result;
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script> --}}
 @endsection

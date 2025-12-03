@@ -15,9 +15,9 @@
                                         <div class="mb-3 row align-items-center">
                                             <label for="name" class="col-sm-2 col-form-label">Full Name</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control-plaintext text-uppercase" disabled
-                                                    name="name" placeholder="Full Name" id="name"
-                                                    value="{{ $siswa->name }}">
+                                                <input type="text" class="form-control text-uppercase" name="name"
+                                                    placeholder="Full Name" id="name" value="{{ $siswa->name }}"
+                                                    disabled>
                                             </div>
                                         </div>
 
@@ -27,14 +27,14 @@
                                             <div class="col-sm-10">
                                                 <div class="form-check form-check-inline ">
                                                     <input class="form-check-input " type="radio" name="gender"
-                                                        id="male" disabled value="m"
-                                                        {{ $siswa->gender == 'm' ? 'checked' : '' }}>
+                                                        id="male" value="m"
+                                                        {{ $siswa->gender == 'm' ? 'checked' : '' }} disabled>
                                                     <label class="form-check-label" for="male">Male</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="gender"
-                                                        id="female" disabled value="f"
-                                                        {{ $siswa->gender == 'f' ? 'checked' : '' }}>
+                                                        id="female" value="f"
+                                                        {{ $siswa->gender == 'f' ? 'checked' : '' }} disabled>
                                                     <label class="form-check-label" for="female">Female</label>
                                                 </div>
 
@@ -52,8 +52,9 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <input type="text" class="form-control text-capitalize"
-                                                            id="dateofbirth" disabled name="dateofbirth"
-                                                            value="{{ \Carbon\Carbon::parse($siswa->dateofbirth)->format('d M Y') }}">
+                                                            id="dateofbirth"name="dateofbirth"
+                                                            value="{{ \Carbon\Carbon::parse($siswa->dateofbirth)->format('d M Y') }}"
+                                                            disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -63,7 +64,7 @@
                                         <div class="mb-3 row align-items-center">
                                             <label for="address" class="col-sm-2 col-form-label">Address</label>
                                             <div class="col-sm-10">
-                                                <textarea class="form-control-plaintext" name="address" placeholder="Address" disabled id="address">{{ $siswa->address }}</textarea>
+                                                <textarea class="form-control" name="address" placeholder="Address" id="address" disabled>{{ $siswa->address }}</textarea>
                                             </div>
                                         </div>
 
@@ -71,9 +72,9 @@
                                         <div class="mb-3 row align-items-center">
                                             <label for="phone" class="col-sm-2 col-form-label">Phone</label>
                                             <div class="col-sm-10">
-                                                <input type="tel" class="form-control-plaintext" id="phone"
-                                                    name="phone" disabled placeholder="Enter your phone number"
-                                                    value="{{ $siswa->phone }}">
+                                                <input type="tel" class="form-control" id="phone" name="phone"
+                                                    disabled placeholder="Enter your phone number"
+                                                    value="{{ $siswa->phone }}" disabled>
                                             </div>
                                         </div>
 
@@ -81,7 +82,7 @@
                                         <div class="mb-3 row align-items-center">
                                             <label for="subject" class="col-sm-2 col-form-label">Subject</label>
                                             <div class="col-sm-10">
-                                                <select class="form-select" name="subject" disabled id="subject">
+                                                <select class="form-select" name="subject" id="subject" disabled>
                                                     @if ($siswa->subject == 'ap')
                                                         <option>Office</option>
                                                     @endif
@@ -102,7 +103,7 @@
                                         <div class="mb-3 row align-items-center">
                                             <label for="education" class="col-sm-2 col-form-label">Highest Education</label>
                                             <div class="col-sm-10">
-                                                <select class="form-select" disabled id="education" name="education">
+                                                <select class="form-select" id="education" name="education" disabled>
                                                     {{-- <option >{{ strtoupper ($siswa->education) }}</option> --}}
                                                     <option value="" selected disabled>Select the Subject</option>
                                                     <option value="junior"

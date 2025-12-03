@@ -66,11 +66,28 @@
 
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="{{ route('instructor.index') }}" class="btn btn-secondary">Back</a>
+
                     </form>
+
+                    {{-- JS PREVIEW --}}
+                    <script>
+                        document.getElementById("photo").addEventListener("change", function(e) {
+                            const file = e.target.files[0];
+                            const preview = document.getElementById("photoPreview");
+
+                            if (file) {
+                                if (file.type.startsWith("image/")) {
+                                    preview.src = URL.createObjectURL(file);
+                                } else {
+                                    alert("Please upload a valid image file.");
+                                    e.target.value = "";
+                                    preview.src = "/assets/img/instructor/default.png";
+                                }
+                            }
+                        });
+                    </script>
                 </div>
-
             </div>
-
             {{-- RIGHT SIDE: PHOTO PREVIEW --}}
             <div class="col-md-4">
 
@@ -83,17 +100,5 @@
 
             </div>
         </div>
-
     </div>
-
-    {{-- JS PREVIEW --}}
-    <script>
-        document.getElementById('photoInput').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('photoPreview').src = e.target.result;
-            }
-            reader.readAsDataURL(this.files[0]);
-        });
-    </script>
 @endsection

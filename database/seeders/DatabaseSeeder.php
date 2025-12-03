@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             siswaSeeder::class,
             userSeeder::class,
-            instructorSeeder::class
+            instructorSeeder::class,
+            subjectSeeder::class
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

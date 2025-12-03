@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $subjects = Subject::orderBy('name')->paginate(10);
+        $cari = $request->input('search');
+        $subjects = Subject::where('name', 'like', "%{$cari}%")->orderBy('name', 'asc')->paginate(10);
         return view('subject.index', compact('subjects'));
     }
 
@@ -21,38 +22,45 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:50|unique:subjects,name'
+            'name' => 'required|string|max:50'
         ]);
 
-        Subject::create(['name' => $request->name]);
+        $data = [
+            'name' => $request->name
+        ];
 
+        Subject::create($data);
         return redirect()->route('subject.index')->with('success', 'Subject berhasil ditambahkan');
     }
 
-    public function show(Subject $subject)
+    public function show(string $id)
     {
-        return view('subject.show', compact('subject'));
+        $subjects = Subject::findOrfail($id);
+        return view('subject.show', compact('subjects'));
     }
 
-    public function edit(Subject $subject)
+    public function edit(string $id)
     {
-        return view('subject.edit', compact('subject'));
+        $subjects = Subject::findOrfail($id);
+        return view('subject.edit', compact('subjects'));
     }
 
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request, string $id)
     {
+        $subjects = Subject::findOrfail($id);
+
         $request->validate([
-            'name' => 'required|string|max:50|unique:subjects,name,'
+            'name' => 'required|string|max:50'
         ]);
 
-        $subject->update(['name' => $request->name]);
-
+        $subjects->name = $request->name;
+        $subjects->save();
         return redirect()->route('subject.index')->with('success', 'Subject berhasil diupdate');
     }
 
-    public function destroy(Subject $subject)
+    public function destroy(Subject $subjects)
     {
-        $subject->delete();
+        $subjects->delete();
         return redirect()->route('subject.index')->with('delete', 'Subject berhasil dihapus');
     }
 }
